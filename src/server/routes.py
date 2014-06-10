@@ -23,19 +23,23 @@ def warmup():
 # Home page
 @app.route("/")
 def home_index():
-    return controllers.Home.index()
+    return controllers.HomeController.index()
 
 @app.route("/_group", methods=['POST'])
 def group_create():
-   return controllers.Group.create()
+    return controllers.GroupController.create()
 
 @app.route("/chat/<string:group>", methods=['GET'])
-def chat_index(group):
-    return controllers.Chat.index(group)
+def chat_index(group_id):
+    return controllers.ChatController.index(group_id)
 
-@app.route("/chat/<string:group>", methods=['POSTs'])
-def chat_create(group):
-    return controllers.Chat.create(group)
+@app.route("/chat/<string:group>/_find", methods=['GET'])
+def chat_find(group_id):
+    return controllers.ChatController.find(group_id)
+
+@app.route("/chat/<string:group>/_send", methods=['POST'])
+def chat_create(group_id):
+    return controllers.ChatController.create(group_id)
 
 # Say hello
 #app.add_url_rule('/hello/<username>', 'say_hello', view_func=views.say_hello)

@@ -10,8 +10,5 @@ from google.appengine.ext import ndb
 
 
 class Group(ndb.Model):
-    """Example Model"""
-    #example_name = ndb.StringProperty(required=True)
-    #example_description = ndb.TextProperty(required=True)
-    #added_by = ndb.UserProperty()
-    #timestamp = ndb.DateTimeProperty(auto_now_add=True)
+    name = ndb.StringProperty(required=True)
+    created_at = ndb.DateTimeProperty(auto_now_add=True)

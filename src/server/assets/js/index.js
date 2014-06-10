@@ -2,20 +2,20 @@
 var guide = new Vue({
     el: "#guide",
     data: {
-        group:"",
+        groupName:"",
         groupInfo:null,
         validation: {
-            group: true
+            groupName: true
         }
     },
     methods: {
         createGroup: function(){
             var self = this;
-            $.post(SCRIPT_ROOT + "/_group",{ group:$("#group").val() },function(data){
+            $.post(SCRIPT_ROOT + "/_group",{ groupName:$("#groupName").val() },function(data){
                 if(data == ""){
-                    self.validation.group = false;
+                    self.validation.groupName = false;
                 }else{
-                    self.validation.group = true;
+                    self.validation.groupName = true;
                     self.groupInfo = data;
                 }
             });

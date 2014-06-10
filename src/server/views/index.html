@@ -27,13 +27,13 @@
                 <h3>Create the group</h3>
                 <div class="form-inline" >
                     <div class="form-group">
-                        <label class="sr-only" for="group">Group Name</label>
-                        <input type="text" class="form-control" id="group" placeholder="Group Name" v-model="group | groupValidator">
+                        <label class="sr-only" for="groupName">Group Name</label>
+                        <input type="text" class="form-control" id="groupName" placeholder="Group Name" v-model="groupName">
                     </div>
                     <button class="btn btn-default" v-on="click:createGroup">Create Group</button>
                 </div>
                 <div class="errors">
-                    <span v-show="!validation.group">Group cannot be empty.</span>
+                    <span v-show="!validation.groupName">Group cannot be empty.</span>
                 </div>
             </div>
             <div class="description col-md-5 col-md-offset-1">
@@ -42,7 +42,7 @@
                     If you create the group , <br/>link and qr-code are displayed here.
                 </p>
                 <p style="color:silver;font-size:1.2em" v-if="isCreated()">
-                    <a v-attr="href:groupInfo.url" >Enter group room.</a>
+                    <a v-attr="href:groupInfo.url" target="_blank" >Enter group room.</a><br/>
                     <img v-attr="src:qrCode()" />
                 </p>
             </div>

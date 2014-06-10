@@ -3,15 +3,27 @@
 {% block style_block %}
 {% endblock %}
 
-{% block additional_menu %}
+{% block head_script %}
+    <script src='/_ah/channel/jsapi'></script>
 {% endblock %}
 
 {% block content %}
-<div class="chat">
-    <h2>Chat Start</h2>
+<h2>Chat Start</h2>
+<div id="chat">
+    <div >
+        <input id="message" type="text" />
+        <input type="submit" value="send" v-on="click"/>
+    </div>
+    <div id="messages">
+    </div>
+
 </div>
+
 {% endblock content %}
 
 {% block tail_script %}
+    <script>
+        CHANNEL = new goog.appengine.Channel('{{ token }}');
+    </script>
     <script src="server/assets/js/chat.js"></script>
 {% endblock %}

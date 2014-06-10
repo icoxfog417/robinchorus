@@ -1,4 +1,5 @@
 
-from .home import Home
-from .group import Group
-from .chat import Chat
+
+from .home_controller import HomeController
+from .group_controller import GroupController
+from .chat_controller import ChatController

@@ -1,7 +1,7 @@
 from flask import render_template
 
 
-class Home:
+class HomeController:
 
     def __init__(self):
         pass

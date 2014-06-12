@@ -29,15 +29,15 @@ def home_index():
 def group_create():
     return controllers.GroupController.create()
 
-@app.route("/chat/<string:group>", methods=['GET'])
+@app.route("/chat/<int:group_id>", methods=['GET'])
 def chat_index(group_id):
     return controllers.ChatController.index(group_id)
 
-@app.route("/chat/<string:group>/_find", methods=['GET'])
+@app.route("/chat/<int:group_id>/_find", methods=['GET'])
 def chat_find(group_id):
     return controllers.ChatController.find(group_id)
 
-@app.route("/chat/<string:group>/_send", methods=['POST'])
+@app.route("/chat/<int:group_id>", methods=['POST'])
 def chat_create(group_id):
     return controllers.ChatController.create(group_id)
 

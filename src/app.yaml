@@ -40,6 +40,10 @@ handlers:
   mime_type: text/css
   static_dir: server/assets/css
 
+- url: /server/assets/js/*
+  mime_type: text/javascript
+  static_dir: server/assets/js
+
 - url: /server/assets/*
   static_dir: server/assets
 

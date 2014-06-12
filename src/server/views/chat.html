@@ -1,6 +1,59 @@
 {% extends "base.html" %}
 
 {% block style_block %}
+    <style>
+        .chat{
+            padding: 10px;
+            border: 1px solid lightsteelblue;
+            border-radius: 10px;
+            margin-bottom:5px;
+            transition: all .4s ease;
+        }
+
+        .chat.v-enter, .chat.v-leave {
+            height: 0;
+            padding: 0 10px;
+            opacity: 0;
+        }
+        .feature {
+            background-color:lemonchiffon;
+        }
+        #message {
+            border:1px solid silver;
+            height:44px
+        }
+
+        /* Sticky footer styles
+        -------------------------------------------------- */
+        html {
+            position: relative;
+            min-height: 100%;
+        }
+
+        body {
+            /* Margin bottom by footer height */
+            margin-bottom: 70px;
+        }
+
+        #footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            /* Set the fixed height of the footer here */
+            height: 60px;
+            background-color: #f5f5f5;
+            padding-bottom:10px;
+        }
+
+        /* Custom page CSS
+        -------------------------------------------------- */
+        /* Not required for template or sticky footer method. */
+
+        .container {
+            width: auto;
+            max-width: 680px;
+        }
+    </style>
 {% endblock %}
 
 {% block head_script %}
@@ -8,22 +61,31 @@
 {% endblock %}
 
 {% block content %}
-<h2>Chat Start</h2>
-<div id="chat">
-    <div >
-        <input id="message" type="text" />
-        <input type="submit" value="send" v-on="click"/>
+<h3 style="margin-top:0px;">Threds</h3>
+<div id="chats" style="overflow:auto;">
+    <div v-repeat="c : chats" class="chat" v-on="click: feature" v-transition>
+        [[c.message]]
     </div>
-    <div id="messages">
-    </div>
-
 </div>
 
 {% endblock content %}
+
+{% block footer %}
+<div id="footer" >
+    <div class="container">
+        <div class="input-group">
+            <textarea id="message" class="form-control" rows="2" ></textarea>
+            <span class="input-group-btn">
+                <input id="send" type="submit" value="send" class="btn btn-default" v-on="click : sendMessage" />
+            </span>
+        </div>
+    </div>
+</div>
+{% endblock footer %}
 
 {% block tail_script %}
     <script>
         CHANNEL = new goog.appengine.Channel('{{ token }}');
     </script>
-    <script src="server/assets/js/chat.js"></script>
+    <script src="/server/assets/js/chat.js"></script>
 {% endblock %}

@@ -17,14 +17,14 @@ class Chat(ndb.Model):
     message = ndb.TextProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
 
-"""
-class ChatPlain():
-    def __init__(self, chat):
-        group = Group.get_by_id(chat.group_key.id())
-        participant = Participant.get_by_id(chat.participant_key.id())
+    def to_plain(self):
+        group = Group.get_by_id(self.group_key.id())
+        participant = Participant.get_by_id(self.participant_key.id())
 
-        self.group_name = group.name
-        self.participant_name = participant.name
-        self.message = chat.message
-        self.created_at = chat.created_at
-"""
+        return {
+            "group_name": group.name,
+            "participant_name": participant.name,
+            "message": self.message,
+            "created_ymd": self.created_at.strftime('%Y/%m/%d'),
+            "created_hms": self.created_at.strftime('%H:%M:%S')
+        }

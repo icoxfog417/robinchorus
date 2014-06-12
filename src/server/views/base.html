@@ -22,12 +22,11 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/{{ modernizer_version }}/modernizr.min.js"></script>{# Modernizr must be here, above body tag. #}
     <script src="//cdnjs.cloudflare.com/ajax/libs/vue/{{ vue_version }}/vue.min.js"></script>
     <script>
-        var SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+        var SCRIPT_ROOT = {{ request.base_url|tojson|safe }};
         Vue.config({
             delimiters: ['[', ']']
         });
     </script>
-
     {% block head_script %}{# defer-incapable JS block #}{% endblock %}
 </head>
 <body>
@@ -37,11 +36,9 @@
     <div id="bodycontent" class="container">
         {% block content %}{# main content area #}{% endblock %}
     </div><!-- /container -->
-    <footer>
-        <div id="footer" class="container">
-            {% block footer %}{% endblock %}
-        </div><!-- /footer -->
-    </footer>
+
+    {% block footer %}{# footer area #}{% endblock %}
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/{{ jquery_version }}/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/{{ bootstrap_version }}/js/bootstrap.min.js"></script>
     {% block tail_script %}{# defer-capable JS block #}{% endblock %}

@@ -1,0 +1,28 @@
+.my_arrow_box {
+	position: relative;
+	background: white;
+	border: 2px solid #7fd472;
+}
+.my_arrow_box:after, .my_arrow_box:before {
+	left: 100%;
+	top: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.my_arrow_box:after {
+	border-color: rgba(0, 0, 0, 0);
+	border-left-color: white;
+	border-width: 10px;
+	margin-top: -10px;
+}
+.my_arrow_box:before {
+	border-color: rgba(127, 212, 114, 0);
+	border-left-color: #7fd472;
+	border-width: 13px;
+	margin-top: -13px;
+}

@@ -23,6 +23,25 @@
             height:44px
         }
 
+        #stamps {
+            position:absolute;
+            bottom:75px;
+            height:200px;
+            background-color:white;
+            border:1px solid silver;
+            border-radius:2px;
+            width:90%;
+            max-width:590px;
+            padding:10px;
+        }
+
+        .stamp {
+            width:70px;
+            height:70px;
+            float:left;
+            margin:10px;
+        }
+
         /* Sticky footer styles
         -------------------------------------------------- */
         html {
@@ -60,12 +79,25 @@
     <script src='/_ah/channel/jsapi'></script>
 {% endblock %}
 
+{% block menu %}
+    {% include 'includes/chatnav.html' %} {# pull in navbar #}
+{% endblock %}
+
 {% block content %}
 <h3 style="margin-top:0px;">Threds</h3>
 <div id="chats" style="overflow:auto;">
     <div v-repeat="c : chats" class="chat" v-on="click: feature" v-transition>
-        [[c.message]]
+        <span v-if="c.type == null || c.type == 'text'">[[c.message]]</span>
+        <img v-if="c.type == 'stamp'" v-attr="src: c.message" class="img-responsive">
     </div>
+
+    <!-- Modal for stamps-->
+    <div id="stamps" >
+        <div class="stamp-area">
+            <img v-repeat="s : stamps" v-attr="src: s" class="stamp img-responsive" v-on="click: sendStamp">
+        </div>
+    </div>
+
 </div>
 
 {% endblock content %}
@@ -74,6 +106,11 @@
 <div id="footer" >
     <div class="container">
         <div class="input-group">
+            <span class="input-group-btn">
+                <button id="showStamp" type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-heart-empty"></span>
+                </button>
+            </span>
             <textarea id="message" class="form-control" rows="2" ></textarea>
             <span class="input-group-btn">
                 <input id="send" type="submit" value="send" class="btn btn-default" v-on="click : sendMessage" />

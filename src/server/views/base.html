@@ -31,7 +31,7 @@
 </head>
 <body>
 
-    {% include 'includes/nav.html' %} {# pull in navbar #}
+    {% block menu %}{# menu area #}{% endblock %}
 
     <div id="bodycontent" class="container">
         {% block content %}{# main content area #}{% endblock %}

@@ -14,16 +14,18 @@ from .participant import Participant
 class Chat(ndb.Model):
     group_key = ndb.KeyProperty(kind=Group)
     participant_key = ndb.KeyProperty(kind=Participant)
+    type = ndb.StringProperty()
     message = ndb.TextProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
 
-    def to_plain(self):
+    def to_dict(self):
         group = Group.get_by_id(self.group_key.id())
         participant = Participant.get_by_id(self.participant_key.id())
 
         return {
             "group_name": group.name,
             "participant_name": participant.name,
+            "type": self.type,
             "message": self.message,
             "created_ymd": self.created_at.strftime('%Y/%m/%d'),
             "created_hms": self.created_at.strftime('%H:%M:%S')

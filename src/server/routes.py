@@ -29,7 +29,7 @@ def home_index():
 def group_create():
     return controllers.GroupController.create()
 
-@app.route("/chat/<int:group_id>", methods=['GET'])
+@app.route("/chat/<int:group_id>")
 def chat_index(group_id):
     return controllers.ChatController.index(group_id)
 
@@ -40,6 +40,11 @@ def chat_find(group_id):
 @app.route("/chat/<int:group_id>", methods=['POST'])
 def chat_create(group_id):
     return controllers.ChatController.create(group_id)
+
+@app.route("/chat/<int:group_id>/_stamps", methods=['POST'])
+def chat_find_stamps(group_id):
+    return controllers.ChatController.find_stamps(group_id)
+
 
 # Say hello
 #app.add_url_rule('/hello/<username>', 'say_hello', view_func=views.say_hello)

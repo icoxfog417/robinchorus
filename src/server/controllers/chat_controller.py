@@ -2,6 +2,7 @@ from flask import request, render_template, make_response, jsonify
 from google.appengine.api import channel
 from server.models import Group, Participant, Chat
 import json
+import os
 
 
 class ChatController:
@@ -41,7 +42,7 @@ class ChatController:
     def find(cls, group_id):
         group = Group.get_by_id(group_id)
         chats = Chat.query(Chat.group_key == group.key).order(-Chat.created_at).fetch(100)
-        return jsonify(chats=list(map(lambda c: c.to_plain(), chats)))
+        return jsonify(chats=list(map(lambda c: c.to_dict(), chats)))
 
     @classmethod
     def create(cls, group_id):
@@ -52,20 +53,33 @@ class ChatController:
         if participant_id:
             participant_key = Participant.get_by_id(long(participant_id)).key
 
+        type = request.form.get("type", u"", type=unicode)
         message = request.form.get("message", u"", type=unicode)
 
         chat = Chat(
             group_key=group.key,
             participant_key=participant_key,
+            type=type,
             message=message
         )
 
         chat.put()
-
         # send same group members (include myself)
         participants_in_group = Participant.query(Participant.group_key == group.key)
-        send = lambda p: channel.send_message(str(p.key.id()), json.dumps(chat.to_plain()))
+        send = lambda p: channel.send_message(str(p.key.id()), json.dumps(chat.to_dict()))
         map(send, participants_in_group)
 
         # message is send by channel, so you don't need return
         return ""
+
+    @classmethod
+    def find_stamps(cls, group_id):
+        path = "/server/assets/img/stamps/"
+        stamp_files = os.listdir(os.path.abspath("." + path))
+        stamps = []
+        for img in stamp_files:
+            extension = os.path.splitext(img)[1]
+            if extension.upper() == ".PNG":
+                stamps.append(path + img)
+
+        return jsonify(stamps=stamps)

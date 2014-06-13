@@ -75,11 +75,8 @@ class ChatController:
     @classmethod
     def find_stamps(cls, group_id):
         path = "/server/assets/img/stamps/"
-        stamp_files = os.listdir(os.path.abspath("." + path))
         stamps = []
-        for img in stamp_files:
-            extension = os.path.splitext(img)[1]
-            if extension.upper() == ".PNG":
-                stamps.append(path + img)
+        for num in range(1, 8):
+            stamps.append(path + "stamp{num}.PNG".format(num=str(num).zfill(2)))
 
         return jsonify(stamps=stamps)

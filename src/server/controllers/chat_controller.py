@@ -53,13 +53,13 @@ class ChatController:
         if participant_id:
             participant_key = Participant.get_by_id(long(participant_id)).key
 
-        type = request.form.get("type", u"", type=unicode)
+        msgType = request.form.get("type", u"", type=unicode)
         message = request.form.get("message", u"", type=unicode)
 
         chat = Chat(
             group_key=group.key,
             participant_key=participant_key,
-            type=type,
+            type=msgType,
             message=message
         )
 

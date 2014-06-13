@@ -87,7 +87,7 @@
 <h3 style="margin-top:0px;">Threds</h3>
 <div id="chats" style="overflow:auto;">
     <div v-repeat="c : chats" class="chat" v-on="click: feature" v-transition>
-        <span v-if="c.type == null || c.type == 'text'">[[c.message]]</span>
+        <span v-if="c.type == null || c.type == '' || c.type == 'text'">[[c.message]]</span>
         <img v-if="c.type == 'stamp'" v-attr="src: c.message" class="img-responsive">
     </div>
 

@@ -48,18 +48,18 @@ var chats = new Vue({
         },
         sendMessage: function(e){
             var msg = $("#message").val();
-            this.send(msg,"text", function(data){
+            this.send("text",msg, function(data){
                 // clear message on the text box. message is sended by channel (invoke onMessage method)
                 $("#message").val("");
             });
         },
         sendStamp: function(e){
             var stamp = $(e.target).attr("src");
-            this.send(stamp,"stamp", function(data){
+            this.send("stamp",stamp, function(data){
                 $("#stamps").hide();
             });
         },
-        send: function(msg, type, callback){
+        send: function(type, msg, callback){
             var self = this;
             if(msg == ""){
                 return false;

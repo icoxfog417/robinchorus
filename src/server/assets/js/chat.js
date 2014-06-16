@@ -3,7 +3,10 @@ var chats = new Vue({
     data:{
         chats: [],
         stamps: [],
-        reference: ""
+        reference: "",
+        sort_field: "created_timestamp",
+        sort_reverse: true,
+        filter: ""
     },
     created: function () {
         socket = CHANNEL.open();
@@ -66,6 +69,12 @@ var chats = new Vue({
         feature: function(e){
             $(e.target).toggleClass("feature");
         },
+        orderByCreated: function(e){
+            this.sort_field = "created_timestamp";
+        },
+        orderByLike: function(e){
+            this.sort_field = "like";
+        },
         sendMessage: function(e){
             var msg = $("#message").val();
             this.send("text",msg, function(data){
@@ -90,6 +99,9 @@ var chats = new Vue({
                 return false;
             }else{
                 var reference = $("#message").data("reference");
+                if(reference == "" && self.filter != ""){
+                    reference = self.filter;
+                }
                 $.post(SCRIPT_ROOT ,{type:type, message:msg, reference:reference},callback);
             }
         },
@@ -100,22 +112,26 @@ var chats = new Vue({
         },
         refer: function(vm){
             var self = this;
-            var selected = $(".reference-relation");
-            $(".reference-relation").removeClass("reference-relation"); // clear display
 
-            if(selected.size() > 0){
-                if($(selected[0]).attr("id") == vm.id){
-                    return false;
+            //set visibility
+            if(self.filter != vm.id){
+                self.chats.forEach(function(c){ c.visible = "0" })
+
+                var ref = vm.id;
+                while(ref){
+                    var ref_base = ref;
+                    ref = "";
+                    self.chats.forEach(function(c){
+                        if(c.id == ref_base){
+                            c.visible = "1";
+                            ref = c.reference;
+                        }
+                    });
                 }
-            }
-
-            $("#" + vm.id).addClass("reference-relation"); // myself
-            var ref = vm.reference;
-            while(ref){
-                $("#" + ref).addClass("reference-relation"); // and reference
-                var ref_base = ref;
-                ref = "";
-                self.chats.forEach(function(c){ if(c.id == ref_base){ ref = c.reference; }});
+                self.filter = vm.id;
+            }else{
+                self.chats.forEach(function(c){ c.visible = "1" })
+                self.filter = "";
             }
         }
 
@@ -134,7 +150,7 @@ $(function(){
 
     function resize(){
         var chatHeight = $(window).height() - 210; //minus header/footer height
-        $("#chats").height(chatHeight);
+        $("#chat-area").height(chatHeight);
     }
     $(window).resize(resize)
     resize();

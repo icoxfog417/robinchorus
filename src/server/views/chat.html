@@ -100,30 +100,41 @@
 {% endblock %}
 
 {% block content %}
-<h3 style="margin-top:0px;">Threds</h3>
-<div id="chats" style="overflow:auto;">
-    <div v-repeat="c : chats" class="chat" v-attr="id: c.id" v-transition>
-        <div>
-            <span v-if="c.reference" v-on="click: refer(c)"><a href="javascript:void(0)"  class="glyphicon glyphicon-chevron-left"></a><br/></span>
-            <span v-if="!c.type || c.type == 'text'">[[c.message]]</span>
-            <img v-if="c.type == 'stamp'" v-attr="src: c.message" class="img-responsive">
-        </div>
-        <div class="chat-commands">
-            <div><span class="glyphicon glyphicon-thumbs-up"></span><a href="javascript:void(0)" v-on="click: sendLike(c)">Like [[c.like]]</a></div>
-            <div><span class="glyphicon glyphicon-arrow-left"></span><a href="javascript:void(0)" v-on="click: setReply(c)" >Reply</a></div>
-            <br style="clear:both" />
+<div id="chats">
+    <div>
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                Order <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="javascript:void(0)" v-on="click: orderByCreated">by Created Time</a></li>
+                <li><a href="javascript:void(0)" v-on="click: orderByLike">by Like</a></li>
+            </ul>
         </div>
     </div>
-
-    <!-- Modal for stamps-->
-    <div id="stamps" style="display:none" >
-        <div class="stamp-area">
-            <img v-repeat="s : stamps" v-attr="src: s" class="stamp img-responsive" v-on="click: sendStamp">
+    <div id="chat-area" style="overflow:auto;margin-top:10px;">
+        <div v-repeat="c : chats | filterBy '1' in 'visible' | orderBy sort_field sort_reverse" class="chat" v-attr="id: c.id" v-transition>
+            <div>
+                <span v-if="c.reference" v-on="click: refer(c)"><a href="javascript:void(0)"  class="glyphicon glyphicon-chevron-left"></a><br/></span>
+                <span v-if="!c.type || c.type == 'text'">[[c.message]]</span>
+                <img v-if="c.type == 'stamp'" v-attr="src: c.message" class="img-responsive">
+            </div>
+            <div class="chat-commands">
+                <div><span class="glyphicon glyphicon-thumbs-up"></span><a href="javascript:void(0)" v-on="click: sendLike(c)">Like [[c.like]]</a></div>
+                <div><span class="glyphicon glyphicon-arrow-left"></span><a href="javascript:void(0)" v-on="click: setReply(c)" >Reply</a></div>
+                <br style="clear:both" />
+            </div>
         </div>
-    </div>
 
+        <!-- Modal for stamps-->
+        <div id="stamps" style="display:none" >
+            <div class="stamp-area">
+                <img v-repeat="s : stamps" v-attr="src: s" class="stamp img-responsive" v-on="click: sendStamp">
+            </div>
+        </div>
+
+    </div>
 </div>
-
 {% endblock content %}
 
 {% block footer %}

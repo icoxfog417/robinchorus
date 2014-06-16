@@ -32,6 +32,6 @@ class Chat(ndb.Model):
             "message": self.message,
             "like": self.like,
             "reference": self.reference,
-            "created_ymd": self.created_at.strftime('%Y/%m/%d'),
-            "created_hms": self.created_at.strftime('%H:%M:%S')
+            "created_timestamp": self.created_at.strftime('%Y/%m/%d') + " " + self.created_at.strftime('%H:%M:%S'),
+            "visible": "1"
         }

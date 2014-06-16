@@ -45,7 +45,7 @@ class ChatController:
         return jsonify(chats=list(map(lambda c: c.to_dict(), chats)))
 
     @classmethod
-    def create(cls, group_id):
+    def create(cls, group_id, msg_type):
         group = Group.get_by_id(group_id)
         participant_key = None
         participant_id = request.cookies.get("participant_id")
@@ -53,24 +53,48 @@ class ChatController:
         if participant_id:
             participant_key = Participant.get_by_id(long(participant_id)).key
 
-        msgType = request.form.get("type", u"", type=unicode)
         message = request.form.get("message", u"", type=unicode)
+        reference_id = request.form.get("reference", u"", type=unicode)
 
         chat = Chat(
             group_key=group.key,
             participant_key=participant_key,
-            type=msgType,
+            type=msg_type,
             message=message
         )
 
+        #set reference if exist
+        if reference_id:
+            reference = Chat.get_by_id(long(reference_id))
+            if reference is not None:
+                chat.reference = reference.key.id()
+
         chat.put()
+
         # send same group members (include myself)
-        participants_in_group = Participant.query(Participant.group_key == group.key)
-        send = lambda p: channel.send_message(str(p.key.id()), json.dumps(chat.to_dict()))
-        map(send, participants_in_group)
+        cls.__broadcast(group_id, chat)
 
         # message is send by channel, so you don't need return
         return ""
+
+    @classmethod
+    def update(cls, group_id, update_func):
+        chat_id = request.form.get("id", u"", type=unicode)
+        if chat_id:
+            chat = Chat.get_by_id(long(chat_id))
+            if chat is not None:
+                update_func(chat)
+                chat.put()
+                cls.__broadcast(group_id, chat)
+
+        return ""
+
+    @classmethod
+    def __broadcast(cls, group_id, chat):
+        group = Group.get_by_id(group_id)
+        participants_in_group = Participant.query(Participant.group_key == group.key)
+        send = lambda p: channel.send_message(str(p.key.id()), json.dumps(chat.to_dict()))
+        map(send, participants_in_group)
 
     @classmethod
     def find_stamps(cls, group_id):

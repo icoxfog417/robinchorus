@@ -16,6 +16,8 @@ class Chat(ndb.Model):
     participant_key = ndb.KeyProperty(kind=Participant)
     type = ndb.StringProperty()
     message = ndb.TextProperty()
+    like = ndb.IntegerProperty()
+    reference = ndb.IntegerProperty()
     created_at = ndb.DateTimeProperty(auto_now_add=True)
 
     def to_dict(self):
@@ -23,10 +25,13 @@ class Chat(ndb.Model):
         participant = Participant.get_by_id(self.participant_key.id())
 
         return {
+            "id": self.key.id(),
             "group_name": group.name,
             "participant_name": participant.name,
             "type": self.type,
             "message": self.message,
+            "like": self.like,
+            "reference": self.reference,
             "created_ymd": self.created_at.strftime('%Y/%m/%d'),
             "created_hms": self.created_at.strftime('%H:%M:%S')
         }

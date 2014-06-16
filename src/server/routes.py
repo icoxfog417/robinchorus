@@ -6,7 +6,7 @@ URL dispatch route mappings and error handlers
 """
 from server import app
 from server import controllers
-from flask import render_template
+from flask import request, render_template
 
 ## URL dispatch rules
 # App Engine warm up handler
@@ -39,31 +39,22 @@ def chat_find(group_id):
 
 @app.route("/chat/<int:group_id>", methods=['POST'])
 def chat_create(group_id):
-    return controllers.ChatController.create(group_id)
+    msg_type = request.form.get("type", u"", type=unicode)
+
+    if msg_type == u"like":
+        def update_like(c):
+            if c.like is None:
+                c.like = 1
+            else:
+                c.like += 1
+
+        return controllers.ChatController.update(group_id, update_like)
+    else:
+        return controllers.ChatController.create(group_id, msg_type)
 
 @app.route("/chat/<int:group_id>/_stamps", methods=['POST'])
 def chat_find_stamps(group_id):
     return controllers.ChatController.find_stamps(group_id)
-
-
-# Say hello
-#app.add_url_rule('/hello/<username>', 'say_hello', view_func=views.say_hello)
-
-# Examples list page
-#app.add_url_rule('/examples', 'list_examples', view_func=views.list_examples, methods=['GET', 'POST'])
-
-# Examples list page (cached)
-#app.add_url_rule('/examples/cached', 'cached_examples', view_func=views.cached_examples, methods=['GET'])
-
-# Contrived admin-only view example
-#app.add_url_rule('/admin_only', 'admin_only', view_func=views.admin_only)
-
-# Edit an example
-#app.add_url_rule('/examples/<int:example_id>/edit', 'edit_example', view_func=views.edit_example, methods=['GET', 'POST'])
-
-# Delete an example
-#app.add_url_rule('/examples/<int:example_id>/delete', view_func=views.delete_example, methods=['POST'])
-
 
 ## Error handlers
 # Handle 404 errors

@@ -2,7 +2,8 @@ var chats = new Vue({
     el: "#chats",
     data:{
         chats: [],
-        stamps: []
+        stamps: [],
+        reference: ""
     },
     created: function () {
         socket = CHANNEL.open();
@@ -18,7 +19,26 @@ var chats = new Vue({
         },
         onMessage: function(envelope){
             var c = JSON.parse(envelope.data);
-            chats.$data.chats.unshift(c);
+            var chatArray = chats.$data.chats;
+            var storedAt = -1;
+            for(var i = 0; i < chatArray.length;i++){
+                if(chatArray[i].id == c.id){
+                    storedAt = i;
+                    break;
+                }
+            }
+
+            if(storedAt > -1){
+                chatArray.splice(storedAt,1,c); //update
+            }else{
+                chatArray.unshift(c);
+                if(c.reference){
+                    setTimeout(function(){
+                        chats.refer(c);
+                    },1000);
+                }
+            }
+
         },
         onerror: function(){
             console.log("error occur");
@@ -30,7 +50,7 @@ var chats = new Vue({
             var self = this;
             //load chats
             $.getJSON(SCRIPT_ROOT + "/_find",function(data){
-                if(data !== undefined || data != ""){
+                if(data){
                     self.chats.$remove();
                     data.chats.forEach(function(c){ self.chats.push(c); })
                 }
@@ -51,6 +71,7 @@ var chats = new Vue({
             this.send("text",msg, function(data){
                 // clear message on the text box. message is sended by channel (invoke onMessage method)
                 $("#message").val("");
+                $("#message").data("reference","")
             });
         },
         sendStamp: function(e){
@@ -59,12 +80,42 @@ var chats = new Vue({
                 $("#stamps").hide();
             });
         },
+        sendLike: function(c){
+            $.post(SCRIPT_ROOT ,{type:"like", id:c.id});
+            return false;
+        },
         send: function(type, msg, callback){
             var self = this;
             if(msg == ""){
                 return false;
             }else{
-                $.post(SCRIPT_ROOT ,{type:type, message:msg},callback);
+                var reference = $("#message").data("reference");
+                $.post(SCRIPT_ROOT ,{type:type, message:msg, reference:reference},callback);
+            }
+        },
+        setReply: function(c){
+            $("#message").data("reference",c.id);
+            $("#message").focus();
+            return false;
+        },
+        refer: function(vm){
+            var self = this;
+            var selected = $(".reference-relation");
+            $(".reference-relation").removeClass("reference-relation"); // clear display
+
+            if(selected.size() > 0){
+                if($(selected[0]).attr("id") == vm.id){
+                    return false;
+                }
+            }
+
+            $("#" + vm.id).addClass("reference-relation"); // myself
+            var ref = vm.reference;
+            while(ref){
+                $("#" + ref).addClass("reference-relation"); // and reference
+                var ref_base = ref;
+                ref = "";
+                self.chats.forEach(function(c){ if(c.id == ref_base){ ref = c.reference; }});
             }
         }
 

@@ -10,12 +10,28 @@
             transition: all .4s ease;
         }
 
+        .chat-commands {
+            opacity:0.6;
+            text-align:right;
+            height:15px;
+        }
+
+        .chat-commands div{
+            float:right;
+            margin-left:30px;
+        }
+
+        .chat-commands div a{
+            margin-left:5px;
+        }
+
         .chat.v-enter, .chat.v-leave {
             height: 0;
             padding: 0 10px;
             opacity: 0;
         }
-        .feature {
+
+        .reference-relation {
             background-color:lemonchiffon;
         }
         #message {
@@ -86,9 +102,17 @@
 {% block content %}
 <h3 style="margin-top:0px;">Threds</h3>
 <div id="chats" style="overflow:auto;">
-    <div v-repeat="c : chats" class="chat" v-on="click: feature" v-transition>
-        <span v-if="c.type == null || c.type == '' || c.type == 'text'">[[c.message]]</span>
-        <img v-if="c.type == 'stamp'" v-attr="src: c.message" class="img-responsive">
+    <div v-repeat="c : chats" class="chat" v-attr="id: c.id" v-transition>
+        <div>
+            <span v-if="c.reference" v-on="click: refer(c)"><a href="javascript:void(0)"  class="glyphicon glyphicon-chevron-left"></a><br/></span>
+            <span v-if="!c.type || c.type == 'text'">[[c.message]]</span>
+            <img v-if="c.type == 'stamp'" v-attr="src: c.message" class="img-responsive">
+        </div>
+        <div class="chat-commands">
+            <div><span class="glyphicon glyphicon-thumbs-up"></span><a href="javascript:void(0)" v-on="click: sendLike(c)">Like [[c.like]]</a></div>
+            <div><span class="glyphicon glyphicon-arrow-left"></span><a href="javascript:void(0)" v-on="click: setReply(c)" >Reply</a></div>
+            <br style="clear:both" />
+        </div>
     </div>
 
     <!-- Modal for stamps-->
@@ -111,7 +135,7 @@
                     <span class="glyphicon glyphicon-heart-empty"></span>
                 </button>
             </span>
-            <textarea id="message" class="form-control" rows="2" ></textarea>
+            <textarea id="message" class="form-control" rows="2" data-reference=""></textarea>
             <span class="input-group-btn">
                 <input id="send" type="submit" value="send" class="btn btn-default" v-on="click : sendMessage" />
             </span>

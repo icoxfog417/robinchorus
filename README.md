@@ -16,6 +16,7 @@ Robin Chorus
 
 * Python 2.7
 * Flask 0.11
+* Vue.js 0.10.5
 * on Google App Engine
 
 confirmed by Google Chrome.

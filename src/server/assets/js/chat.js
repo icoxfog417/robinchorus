@@ -32,14 +32,10 @@ var chats = new Vue({
             }
 
             if(storedAt > -1){
-                chatArray.splice(storedAt,1,c); //update
+                //chatArray.splice(storedAt,1,c); //update
+                chatArray[storedAt].like = c.like;
             }else{
                 chatArray.unshift(c);
-                if(c.reference){
-                    setTimeout(function(){
-                        chats.refer(c);
-                    },1000);
-                }
             }
 
         },
@@ -106,8 +102,14 @@ var chats = new Vue({
             }
         },
         setReply: function(c){
-            $("#message").data("reference",c.id);
-            $("#message").focus();
+            if($("#" + c.id).hasClass("refereed")){
+                $("#message").data("reference","");
+                $("#" + c.id).removeClass("refereed")
+            }else{
+                $("#message").data("reference",c.id);
+                $("#" + c.id).addClass("refereed");
+                $("#message").focus();
+            }
             return false;
         },
         refer: function(vm){

@@ -51,7 +51,8 @@ var chats = new Vue({
             $.getJSON(SCRIPT_ROOT + "/_find",function(data){
                 if(data){
                     self.chats.$remove();
-                    data.chats.forEach(function(c){ self.chats.push(c); })
+                    data.chats.forEach(function(c){ self.chats.push(c); });
+                    $("#chats").css("visibility","visible")
                 }
             });
 

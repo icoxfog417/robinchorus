@@ -157,7 +157,16 @@
 
 {% block tail_script %}
     <script>
-        CHANNEL = new goog.appengine.Channel('{{ token }}');
+        CHANNEL = null;
+        token = '{{ token }}';
+        if(typeof goog == "undefined"){
+            $.getScript("/server/assets/js/channel.js",function(){
+                CHANNEL = new goog.appengine.Channel(token);
+                $.getScript("/server/assets/js/chat.js");
+            })
+        }else{
+            CHANNEL = new goog.appengine.Channel(token);
+                $.getScript("/server/assets/js/chat.js");
+        }
     </script>
-    <script src="/server/assets/js/chat.js"></script>
 {% endblock %}

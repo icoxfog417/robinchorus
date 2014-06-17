@@ -16,11 +16,11 @@ class ChatController:
         c_group_id = request.cookies.get("group_id")
         participant_id = request.cookies.get("participant_id")
 
+        # get group
+        group = Group.get_by_id(group_id)
+
         # if participant is none or login to another group, create new participant in group
         if not participant_id or c_group_id != str(group_id):
-            # get group
-            group = Group.get_by_id(group_id)
-
             # create new participant todo:consider the case that group is None
             participant = Participant()
             participant.group_key = group.key
@@ -30,7 +30,7 @@ class ChatController:
         token = channel.create_channel(str(participant_id))
 
         # return response
-        resp = make_response(render_template('chat.html', token=token))
+        resp = make_response(render_template('chat.html', token=token, group_name=group.name))
 
         # set participant_id to cookie
         resp.set_cookie("group_id", str(group_id))

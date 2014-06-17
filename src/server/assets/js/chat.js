@@ -76,6 +76,7 @@ var chats = new Vue({
             this.send("text",msg, function(data){
                 // clear message on the text box. message is sended by channel (invoke onMessage method)
                 $("#message").val("");
+                $(".refereed").removeClass("refereed")
                 $("#message").data("reference","")
             });
         },

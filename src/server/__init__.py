@@ -4,6 +4,7 @@ Initialize Flask app
 """
 from flask import Flask
 import os
+from .environments import Config
 from werkzeug.debug import DebuggedApplication
 views = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'views')
 

@@ -1,8 +1,9 @@
 from flask import request, render_template, make_response, jsonify
 from google.appengine.api import channel
+from werkzeug.contrib.cache import GAEMemcachedCache
 from server.models import Group, Participant, Chat
+from server.environments import Config
 import json
-import os
 
 
 class ChatController:
@@ -27,14 +28,21 @@ class ChatController:
             participant_id = participant.put().id()  # save it to datastore
 
         # create channel
-        token = channel.create_channel(str(participant_id))
+        participant_id_str = str(participant_id)
+        cache = GAEMemcachedCache()
+        token = cache.get(participant_id_str)
+        if token is None:
+            token = channel.create_channel(participant_id_str)
+            # expiration of channel api token is 2 hour
+            # https://developers.google.com/appengine/docs/python/channel/?hl=ja#Python_Tokens_and_security
+            cache.set(participant_id_str, token, 3600 * 2)
 
         # return response
         resp = make_response(render_template('chat.html', token=token, group_name=group.name))
 
         # set participant_id to cookie
-        resp.set_cookie("group_id", str(group_id))
-        resp.set_cookie("participant_id", str(participant_id))
+        resp.set_cookie("group_id", str(group_id),  expires=Config.calculate_expiration())
+        resp.set_cookie("participant_id", participant_id_str, expires=Config.calculate_expiration())
 
         return resp
 
@@ -104,3 +112,17 @@ class ChatController:
             stamps.append(path + "stamp{num}.PNG".format(num=str(num).zfill(2)))
 
         return jsonify(stamps=stamps)
+
+    """
+    @classmethod
+    def close_channel(cls, group_id):
+        participant_id = request.cookies.get("participant_id")
+        token = None
+        if participant_id:
+            cache = GAEMemcachedCache()
+            cache.delete(participant_id)
+            token = channel.create_channel(participant_id)
+            cache.set(participant_id, token)
+
+        return token
+    """

@@ -12,8 +12,8 @@ var chats = new Vue({
         socket = CHANNEL.open();
         socket.onopen = this.onOpen;
         socket.onmessage = this.onMessage;
-        socket.onerror = this.onError;
-        socket.onclose = this.onClose;
+        socket.onerror = this.reconnect;
+        socket.onclose = this.reconnect;
         this.init();
     },
     methods: {

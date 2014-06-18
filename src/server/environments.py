@@ -8,11 +8,20 @@ Important: Place your keys in the secret_keys.py module,
 
 """
 
-import os
+from datetime import datetime, timedelta
+import calendar
+
 
 class Config(object):
     # Flask-Cache settings
     CACHE_TYPE = 'gaememcached'
+    COOKIE_EXPIRATION = timedelta(hours=2)
+
+    @classmethod
+    def calculate_expiration(cls):
+        endpoint = datetime.utcnow() + cls.COOKIE_EXPIRATION
+        return calendar.timegm(endpoint.timetuple())
+
 
 class Development(Config):
     DEBUG = True
@@ -21,10 +30,12 @@ class Development(Config):
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     CSRF_ENABLED = True
 
+
 class Testing(Config):
     TESTING = True
     DEBUG = True
     CSRF_ENABLED = True
+
 
 class Production(Config):
     DEBUG = False

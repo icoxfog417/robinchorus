@@ -56,6 +56,12 @@ def chat_create(group_id):
 def chat_find_stamps(group_id):
     return controllers.ChatController.find_stamps(group_id)
 
+"""
+@app.route("/chat/<int:group_id>/_reconnect_channel", methods=['POST'])
+def reconnect_channel(group_id):
+    return controllers.ChatController.reconnect_channel(group_id)
+"""
+
 ## Error handlers
 # Handle 404 errors
 @app.errorhandler(404)

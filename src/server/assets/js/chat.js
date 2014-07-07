@@ -2,7 +2,7 @@ var chats = new Vue({
     el: "#chats",
     data:{
         chats: [],
-        stamps: [],
+        stamps: {},
         reference: "",
         sort_field: "created_timestamp",
         sort_reverse: true,
@@ -58,8 +58,12 @@ var chats = new Vue({
 
             //load stamp images
             $.post(SCRIPT_ROOT + "/_stamps" ,function(data){
-                self.stamps.$remove();
-                data.stamps.forEach(function(s){ self.stamps.push(s); })
+                self.stamps = {};
+                for(var key in data.stamps){
+                    var stampKey = key.charAt(0).toUpperCase() + key.slice(1); //upper first character
+                    self.stamps[stampKey] = [];
+                    data.stamps[key].forEach(function(s){ self.stamps[stampKey].push(s); })
+                }
             })
 
         },
@@ -150,6 +154,9 @@ $(function(){
 
     $("#showStamp").click(function(e){
         $("#stamps").toggle();
+        if($("#stamps .active").size() == 0){
+            $("#stamps a:first").tab("show");
+        }
     })
 
     function resize(){

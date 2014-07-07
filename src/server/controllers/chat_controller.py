@@ -107,9 +107,14 @@ class ChatController:
     @classmethod
     def find_stamps(cls, group_id):
         path = "/server/assets/img/stamps/"
-        stamps = []
-        for num in range(1, 8):
-            stamps.append(path + "stamp{num}.PNG".format(num=str(num).zfill(2)))
+        stamp_def = {"default": range(1, 9), "sushiyuki": range(1, 41)}
+        stamps = {}
+
+        # can not read directory path on app engine server. so take this not good way
+        for key in stamp_def:
+            stamps[key] = list()
+            for stamp_index in stamp_def[key]:
+                stamps[key].append(path + key + "/stamp{num}.PNG".format(num=str(stamp_index).zfill(2)))
 
         return jsonify(stamps=stamps)
 

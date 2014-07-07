@@ -129,8 +129,16 @@
 
         <!-- Modal for stamps-->
         <div id="stamps" style="display:none" >
-            <div class="stamp-area">
-                <img v-repeat="s : stamps" v-attr="src: s" class="stamp img-responsive" v-on="click: sendStamp">
+            <ul class="nav nav-tabs nav-pills" role="tablist">
+                <li v-repeat="stamps" >
+                    <a href="#tab-[[$key]]" role="tab" data-toggle="tab">[[$key]]</a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div v-repeat="stamps" class="tab-pane stamp-area" id="tab-[[$key]]" >
+                    <img v-repeat="image : $value" v-attr="src: image" class="stamp img-responsive" v-on="click: sendStamp">
+                </div>
             </div>
         </div>
 
@@ -167,7 +175,7 @@
             })
         }else{
             CHANNEL = new goog.appengine.Channel(token);
-                $.getScript("/server/assets/js/chat.js");
+            $.getScript("/server/assets/js/chat.js");
         }
     </script>
 {% endblock %}

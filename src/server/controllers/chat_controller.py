@@ -49,7 +49,7 @@ class ChatController:
     @classmethod
     def find(cls, group_id):
         group = Group.get_by_id(group_id)
-        chats = Chat.query(Chat.group_key == group.key).order(-Chat.created_at).fetch(100)
+        chats = Chat.query(Chat.group_key == group.key).order(-Chat.created_at)
         return jsonify(chats=list(map(lambda c: c.to_dict(), chats)))
 
     @classmethod

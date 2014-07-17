@@ -30,6 +30,9 @@
             padding: 0 10px;
             opacity: 0;
         }
+        .chat div p{
+            margin:0px;
+        }
 
         .refereed {
             background-color:lemonchiffon;
@@ -94,6 +97,7 @@
 
 {% block head_script %}
     <script src='/_ah/channel/jsapi'></script>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js'></script>
 {% endblock %}
 
 {% block menu %}
@@ -117,7 +121,7 @@
         <div v-repeat="c : chats | filterBy '1' in 'visible' | orderBy sort_field sort_reverse" class="chat" v-attr="id: c.id" v-transition>
             <div>
                 <span v-if="c.reference" v-on="click: refer(c)"><a href="javascript:void(0)"  class="glyphicon glyphicon-chevron-left"></a><br/></span>
-                <span v-if="!c.type || c.type == 'text'">[[c.message]]</span>
+                <div v-if="!c.type || c.type == 'text'" v-html="c.message | marked"></div>
                 <img v-if="c.type == 'stamp'" v-attr="src: c.message" class="img-responsive">
             </div>
             <div class="chat-commands">
@@ -166,6 +170,24 @@
 
 {% block tail_script %}
     <script>
+        //render chat text as markdown
+        var renderer = new marked.Renderer();
+        (function(){
+            anchorRender = {
+                options:{
+                    sanitize:true
+                },
+                render: marked.Renderer.prototype.link
+            };
+            renderer.link = function(href, title, text){
+                var anchor = anchorRender.render(href, title, text);
+                return anchor.replace("<a","<a target='_blank' ");
+            }
+        })();
+        marked.setOptions({
+          renderer: renderer
+        })
+
         CHANNEL = null;
         token = '{{ token }}';
         if(typeof goog == "undefined"){

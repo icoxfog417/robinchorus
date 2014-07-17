@@ -142,7 +142,9 @@ var chats = new Vue({
                 self.filter = "";
             }
         }
-
+    },
+    filters: {
+        marked: marked
     }
 })
 

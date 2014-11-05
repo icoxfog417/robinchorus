@@ -1,7 +1,7 @@
 Robin Chorus
 ===========
 
-[Robin Chorus](http://robinchorusx.appspot.com/) is group chat service .
+Robin Chorus is group chat service .
 
 ## Feature
 
@@ -14,9 +14,10 @@ Robin Chorus
 
 ## Environment
 
-* Python 2.7
-* Flask 0.11
+* Python 3.4.1
+* tornado 4.0.2
+* redis.py 2.10.3
 * Vue.js 0.10.5
-* on Google App Engine
+* on Heroku
 
 confirmed by Google Chrome.

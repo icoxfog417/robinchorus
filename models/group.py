@@ -1,4 +1,4 @@
-from base_model import BaseModel
+from .base_model import BaseModel
 
 
 class Group(BaseModel):
@@ -23,12 +23,12 @@ class Group(BaseModel):
         return self.push_list(self._list_name("chat"), chat)
 
     def chats(self, start=0, count=1):
-        from chat import Chat
+        from .chat import Chat
         return self.get_list(self._list_name("chat"), Chat, start, count)
 
     def participant(self, participant):
         return self.push_list(self._list_name("participant"), participant)
 
     def participants(self, start=0, count=1):
-        from participant import Participant
+        from .participant import Participant
         return self.get_list(self._list_name("participant"), Participant, start, count)

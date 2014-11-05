@@ -1,5 +1,5 @@
-from base_model import BaseModel
-from group import Group
+from .base_model import BaseModel
+from .group import Group
 
 
 class Chat(BaseModel):
@@ -47,7 +47,7 @@ class Chat(BaseModel):
 
     def to_dict(self):
         data = self._to_dict()
-        from participant import Participant
+        from .participant import Participant
         participant = Participant.get(self.participant_key)
         data["participant_name"] = participant.name
 

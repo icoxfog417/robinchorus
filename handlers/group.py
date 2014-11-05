@@ -1,5 +1,4 @@
 import tornado.web
-import json
 from models import Group
 
 

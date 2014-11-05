@@ -9,7 +9,7 @@ from handlers import GroupHandler, ChatHandler, ChatsHandler, ChatSocketHandler,
 class Application(tornado.web.Application):
     """
     Please define os environment variable
-    * SECRET_KEY: secret key for storing secure cookie
+    * SECRET_TOKEN: secret key for storing secure cookie
     * PORT: port number
     """
 

@@ -11,6 +11,9 @@ var chats = new Vue({
     created: function () {
         var socket = null;
         var url = [(location.protocol == "https:")? "wss:" : "ws:", "//", location.host, location.pathname, "/socket"].join("");
+        if(location.protocol == "http:"){
+            console.log("Caution!! connection is not secure (http).");
+        }
         socket = new ReconnectingWebSocket(url);
         socket.onopen = this.onOpen;
         socket.onmessage = this.onMessage;

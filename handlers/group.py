@@ -14,7 +14,7 @@ class GroupHandler(tornado.web.RequestHandler):
             # create group
             group = Group(name=group_name)
             group.store()
-            url = '{0}://{1}{2}'.format(self.request.protocol, self.request.host, "/chat/{0}".format(group.key))
+            url = '//{0}{1}'.format(self.request.host, "/chat/{0}".format(group.key))
             response = {"key": group.key, "url": url}
 
         return self.write(response)

@@ -96,7 +96,7 @@
 {% end %}
 
 {% block head_script %}
-    <script src='http://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js'></script>
+    <script src='//cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js'></script>
 {% end %}
 
 {% block menu %}
@@ -169,6 +169,7 @@
 {% end%}
 
 {% block tail_script %}
+    {% set url = '//{0}{1}'.format(request.host, request.uri) %}
     <script src="/static/js/reconnecting-websocket.js"></script>
     <script src="/static/js/chat.js"></script>
     <script>
@@ -189,5 +190,9 @@
         marked.setOptions({
           renderer: renderer
         })
+        var url = location.protocol + "{{ url }}";
+        $("#qrcode").qrcode({width: 100, height: 100, text: url});
+        var mailto = $("#mailAddress").attr("href");
+        $("#mailAddress").attr("href", mailto + url);
     </script>
 {% end %}

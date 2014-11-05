@@ -17,18 +17,13 @@ var guide = new Vue({
                 }else{
                     self.validation.groupName = true;
                     self.groupInfo = data;
+                    self.groupInfo.url = location.protocol + self.groupInfo.url;
+                    $("#qrcode").qrcode({width: 150, height: 150, text: self.groupInfo.url});
                 }
             });
         },
         isCreated: function(){
             return (this.groupInfo == null) ? false : true;
-        },
-        qrCode: function(){
-            if(this.isCreated){
-                return "http://chart.apis.google.com/chart?chs=150x150&cht=qr&chl=" + this.groupInfo.url;
-            }else{
-                return "";
-            }
         }
     }
 })

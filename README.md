@@ -3,7 +3,7 @@ Robin Chorus
 
 Robin Chorus is group chat service like twitter/LINE.
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/icoxfog417/robinchorus.git)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 ## Feature
 
